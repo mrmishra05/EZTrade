@@ -1,18 +1,20 @@
+# App.py
 import streamlit as st
 import pandas as pd
 import numpy as np
 import random
 import time
+import requests # Added for making API calls to LLM (conceptual)
 
-# --- Simulate GenAI Functions (In a real app, these would call actual LLMs) ---
+# --- Simulate GenAI Functions ---
 
 # --- Placeholder for a real financial data API key ---
 # In a real application, you would get this from a service like Alpha Vantage, Finnhub, etc.
-# API_KEY = st.secrets["financial_api_key"] # Recommended for security in Streamlit Cloud
+# For secure deployment on Streamlit Cloud, use st.secrets:
+# API_KEY = st.secrets["gemini_api_key"] # For Gemini API
+# FINANCIAL_DATA_API_KEY = st.secrets["financial_data_api_key"] # For financial data API
 
 # Dummy data for demonstration (will be replaced by simulated API calls or real data)
-# For 5000+ stocks, you'd fetch this dynamically from a financial data API.
-# This mock data is just to keep the app runnable for demonstration purposes.
 def fetch_mock_watchlist_data():
     """Simulates fetching data for a few watchlist stocks."""
     return {
@@ -28,7 +30,6 @@ def generate_hot_story_with_ai(market_context):
     """
     Simulates an API call to a Generative AI model (e.g., Gemini 2.0 Flash)
     to generate a "Hot Market Story" based on given market context.
-    In a real app, you would use a library like `requests` to call the LLM API.
     """
     # This is the prompt that would be sent to the LLM
     prompt = (
@@ -39,15 +40,31 @@ def generate_hot_story_with_ai(market_context):
         f"\n\nFormat your response as: 'Headline: [Your Headline]\nImpact: [Your Impact]'"
     )
 
-    # --- SIMULATED LLM RESPONSE ---
-    # In a real application, this would be a fetch/requests call to a Gemini API endpoint.
-    # Example (conceptual, as actual fetch is JS-based, and requests is Python-based):
-    # import requests
-    # headers = {'Content-Type': 'application/json'}
-    # payload = {"contents": [{"role": "user", "parts": [{"text": prompt}]}]}
-    # response = requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}", json=payload)
-    # result = response.json()
-    # generated_text = result['candidates'][0]['content']['parts'][0]['text']
+    # --- REAL LLM INTEGRATION (Conceptual Python `requests` call) ---
+    # This section shows where you would integrate your actual LLM API call.
+    # For a Streamlit Cloud app, you'd typically use `st.secrets` for the API key.
+    #
+    # try:
+    #     chat_history = []
+    #     chat_history.append({"role": "user", "parts": [{"text": prompt}]})
+    #     payload = {"contents": chat_history}
+    #     # Replace with your actual Gemini API endpoint and key
+    #     api_key = st.secrets["gemini_api_key"] # Ensure this is set in Streamlit Secrets
+    #     api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
+    #     
+    #     response = requests.post(api_url, headers={'Content-Type': 'application/json'}, json=payload)
+    #     response.raise_for_status() # Raise an HTTPError for bad responses (4xx or 5xx)
+    #     result = response.json()
+    #
+    #     if result.get('candidates') and result['candidates'][0].get('content') and result['candidates'][0]['content'].get('parts'):
+    #         generated_text = result['candidates'][0]['content']['parts'][0]['text']
+    #         return generated_text
+    #     else:
+    #         return "Headline: AI could not generate a story.\nImpact: Response structure unexpected."
+    # except requests.exceptions.RequestException as e:
+    #     st.error(f"Error calling AI API: {e}")
+    #     return "Headline: AI Service Unavailable\nImpact: Please try again later."
+    # --- END REAL LLM INTEGRATION ---
 
     # For this demo, we return a hardcoded but dynamic-looking response
     simulated_responses = {
@@ -57,15 +74,12 @@ def generate_hot_story_with_ai(market_context):
         "RBI Rates": "Headline: RBI Holds Rates Steady: What it Means for Banking & Finance\nImpact: Neutral to slightly positive for banks like HDFC Bank and ICICI Bank, ensuring stable lending environment.",
         "Crypto Market": "Headline: Bitcoin & Crypto Market Rally on ETF Approvals\nImpact: Strong bullish sentiment across digital assets. High volatility expected around regulatory news."
     }
-    # Randomly pick one for demonstration
     chosen_context = random.choice(list(simulated_responses.keys()))
     return simulated_responses[chosen_context]
 
 def get_hot_stories_from_ai():
     """Fetches AI-generated hot stories."""
     hot_stories = []
-    # In a real app, you'd have more sophisticated data inputs for the AI
-    # For demo, we'll simulate a few calls with different contexts
     contexts = [
         "Recent positive earnings reports from major IT companies and optimistic global tech forecasts.",
         "Anticipated surge in vehicle sales during upcoming festivals and government incentives for EVs.",
@@ -158,7 +172,6 @@ def analyze_trade(trade_details):
     st.write(f"**Entry Price:** {trade_details['entry_price']} | **Exit Price:** {trade_details['exit_price']}")
     st.write(f"**Date:** {trade_details['date']}")
 
-    # Simulate AI analysis based on outcome
     if trade_details['outcome'] == 'Profit':
         st.success("🎉 **Great Job!** Your trade was profitable.")
         st.write("The AI notes that your entry aligned with a strong positive sentiment shift driven by **[simulated news/event related to profitability]**. Your quick exit captured the peak momentum.")
@@ -174,31 +187,93 @@ def analyze_trade(trade_details):
     st.write("- Explore strategies for 'Early Exit Signals' to protect profits/limit losses.")
     st.write("- Understand 'Sectoral Correlations' to anticipate broader market impact.")
 
+# --- AI Co-Pilot Chat Functionality ---
+def get_ai_chat_response(user_message, chat_history, watchlist_data):
+    """
+    Simulates an AI agent's response to a user message.
+    This is where the core LLM integration would happen.
+    """
+    # --- REAL LLM INTEGRATION (Conceptual Python `requests` call for chat) ---
+    # In a real app, you'd send the full chat_history to the LLM for context.
+    # You'd also implement tool calling logic here.
+    #
+    # try:
+    #     # Prepare chat history for LLM
+    #     llm_chat_history = [{"role": "user" if msg["is_user"] else "model", "parts": [{"text": msg["message"]}]} for msg in chat_history]
+    #     llm_chat_history.append({"role": "user", "parts": [{"text": user_message}]})
+    #
+    #     payload = {"contents": llm_chat_history}
+    #     api_key = st.secrets["gemini_api_key"]
+    #     api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
+    #
+    #     response = requests.post(api_url, headers={'Content-Type': 'application/json'}, json=payload)
+    #     response.raise_for_status()
+    #     result = response.json()
+    #
+    #     if result.get('candidates') and result['candidates'][0].get('content') and result['candidates'][0]['content'].get('parts'):
+    #         ai_response_text = result['candidates'][0]['content']['parts'][0]['text']
+    #     else:
+    #         ai_response_text = "I'm having trouble generating a response right now."
+    #
+    #     # --- Basic Tool Calling Simulation ---
+    #     # In a real agent, you'd use a more robust tool-calling framework (e.g., LangChain agents, custom function calling)
+    #     # to detect intent and call app functions.
+    #     lower_message = user_message.lower()
+    #     if "story for" in lower_message:
+    #         for asset_name in watchlist_data.keys():
+    #             if asset_name.lower() in lower_message:
+    #                 return generate_asset_story(asset_name, watchlist_data[asset_name])
+    #     elif "hot stories" in lower_message:
+    #         hot_stories = get_hot_stories_from_ai()
+    #         return "Here are today's hot stories:\n" + "\n".join([f"- {s['title']}: {s['impact']}" for s in hot_stories])
+    #     # Add more tool calls here (e.g., for personalized insights, trade debrief)
+    #
+    #     return ai_response_text
+    #
+    # except requests.exceptions.RequestException as e:
+    #     return f"I'm sorry, I'm having trouble connecting to my brain right now. ({e})"
+    # --- END REAL LLM INTEGRATION ---
+
+    # --- SIMULATED AI RESPONSE FOR DEMO ---
+    lower_message = user_message.lower()
+    if "hello" in lower_message or "hi" in lower_message:
+        return "Hello! How can I assist you with your trading today?"
+    elif "story for" in lower_message:
+        for asset_name in watchlist_data.keys():
+            if asset_name.lower() in lower_message:
+                return generate_asset_story(asset_name, watchlist_data[asset_name])
+        return "I can provide stories for assets on your watchlist. Which one are you interested in?"
+    elif "hot stories" in lower_message:
+        hot_stories = get_hot_stories_from_ai()
+        return "Here are today's hot stories:\n" + "\n".join([f"- {s['title']}: {s['impact']}" for s in hot_stories])
+    elif "premium" in lower_message:
+        return "ZenithFlow AI Premium unlocks personalized stories and trade debriefs! Would you like to know more?"
+    elif "help" in lower_message:
+        return "I can help you by providing asset stories, hot market updates, and (for premium users) personalized insights and trade debriefs. What would you like to know?"
+    else:
+        return "I'm still learning! Can you please rephrase or ask about market stories, hot trends, or trade debriefs?"
+
 # --- User Authentication (Simplified for demo) ---
 def authenticate_user():
-    # In a real app, this would involve a login system (e.g., Firebase Auth)
-    # For demo, we use a simple checkbox to switch between free/premium
     st.sidebar.header("User Status")
     is_premium = st.sidebar.checkbox("Enable Premium Features (Simulated)", value=False)
     return is_premium
 
 # --- Main Streamlit App Layout ---
 def main():
-    st.set_page_config(layout="wide", page_title="EZTrade AI")
+    st.set_page_config(layout="wide", page_title="EZTrade: Your AI Co-Pilot")
 
-    st.title("EZTrade AI: Your AI Co-Pilot for Smarter Trades")
+    st.title("EZTrade: Your AI Co-Pilot for Smarter Trades")
     st.write("Transforming market noise into clear, actionable narratives.")
 
     is_premium = authenticate_user()
+    watchlist_data = fetch_mock_watchlist_data() # Fetch watchlist data once
 
     st.markdown("---")
 
     # 1. My Watchlist First
     st.header("My Watchlist Stories")
     st.write("Quick insights for the assets you care about most.")
-
-    # Fetch mock data for watchlist (in real app, this would be from API)
-    watchlist_data = fetch_mock_watchlist_data()
 
     cols = st.columns(len(watchlist_data))
     for i, (asset, data) in enumerate(watchlist_data.items()):
@@ -216,7 +291,7 @@ def main():
                     st.write(generate_asset_story(asset, data))
                     st.write(f"**Sector:** {data['sector']}")
                     st.write("*(In a real app, this would be a detailed AI-generated narrative based on live data.)*")
-            st.markdown("---") # Separator for cards
+            st.markdown("---")
 
     st.markdown("---")
 
@@ -240,7 +315,7 @@ def main():
         user_selected_interests = st.multiselect(
             "Select your interests to see personalized stories:",
             list(PREMIUM_INTERESTS_DATA.keys()),
-            default=["AI & Tech"] # Default selection for demo
+            default=["AI & Tech"]
         )
         if user_selected_interests:
             personalized_alerts = get_personalized_alerts(is_premium, user_selected_interests)
@@ -254,7 +329,7 @@ def main():
         else:
             st.info("Select interests above to see personalized stories.")
     else:
-        st.warning("Unlock 'Stories Just For You' and other advanced features with EZTrade AI Premium!")
+        st.warning("Unlock 'Stories Just For You' and other advanced features with EZTrade Premium!")
         if st.button("Learn More about Premium"):
             st.write("*(Imagine a link to your pricing page here)*")
 
@@ -266,7 +341,6 @@ def main():
         st.write("Get personalized feedback on your past trades to refine your strategy and avoid common pitfalls.")
         st.info("*(In a real app, you would connect your brokerage account securely for automated debriefs.)*")
 
-        # Simulate a manual trade entry for debrief
         st.subheader("Simulate a Trade Debrief:")
         sim_asset = st.selectbox("Select Asset for Debrief:", list(watchlist_data.keys()), key="sim_asset")
         sim_trade_type = st.radio("Trade Type:", ["Buy", "Sell"], key="sim_trade_type")
@@ -287,11 +361,40 @@ def main():
             }
             analyze_trade(trade_details)
     else:
-        st.warning("Unlock 'Trade Debrief & Learn' to get personalized feedback on your trading performance with EZTrade AI Premium!")
+        st.warning("Unlock 'Trade Debrief & Learn' to get personalized feedback on your trading performance with EZTrade Premium!")
+
+    st.markdown("---")
+
+    # --- New AI Co-Pilot Chat Section ---
+    st.header("💬 EZTrade AI Co-Pilot Chat")
+    st.write("Chat with your AI assistant to get quick answers and insights.")
+
+    # Initialize chat history in session state
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+        st.session_state.messages.append({"role": "assistant", "message": "Hello! I'm your EZTrade AI Co-Pilot. How can I help you today? Try asking for 'story for Reliance' or 'hot stories'."})
+
+    # Display chat messages
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["message"])
+
+    # User input
+    if prompt := st.chat_input("Ask me anything about the market..."):
+        st.session_state.messages.append({"role": "user", "message": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                # Pass watchlist_data to the AI for potential tool calling
+                ai_response = get_ai_chat_response(prompt, st.session_state.messages, watchlist_data)
+                st.markdown(ai_response)
+            st.session_state.messages.append({"role": "assistant", "message": ai_response})
 
     st.markdown("---")
     st.sidebar.markdown("---")
-    st.sidebar.info("EZTrade AI: Your intelligent co-pilot for the Indian stock market. Built for clarity, powered by AI.")
+    st.sidebar.info("EZTrade: Your intelligent co-pilot for the Indian stock market. Built for clarity, powered by AI.")
 
 if __name__ == "__main__":
     main()
