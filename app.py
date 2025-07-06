@@ -184,9 +184,9 @@ def authenticate_user():
 
 # --- Main Streamlit App Layout ---
 def main():
-    st.set_page_config(layout="wide", page_title="ZenithFlow AI")
+    st.set_page_config(layout="wide", page_title="EZTrade AI")
 
-    st.title("ZenithFlow AI: Your AI Co-Pilot for Smarter Trades")
+    st.title("EZTrade AI: Your AI Co-Pilot for Smarter Trades")
     st.write("Transforming market noise into clear, actionable narratives.")
 
     is_premium = authenticate_user()
@@ -254,7 +254,7 @@ def main():
         else:
             st.info("Select interests above to see personalized stories.")
     else:
-        st.warning("Unlock 'Stories Just For You' and other advanced features with ZenithFlow AI Premium!")
+        st.warning("Unlock 'Stories Just For You' and other advanced features with EZTrade AI Premium!")
         if st.button("Learn More about Premium"):
             st.write("*(Imagine a link to your pricing page here)*")
 
@@ -287,11 +287,11 @@ def main():
             }
             analyze_trade(trade_details)
     else:
-        st.warning("Unlock 'Trade Debrief & Learn' to get personalized feedback on your trading performance with ZenithFlow AI Premium!")
+        st.warning("Unlock 'Trade Debrief & Learn' to get personalized feedback on your trading performance with EZTrade AI Premium!")
 
     st.markdown("---")
     st.sidebar.markdown("---")
-    st.sidebar.info("ZenithFlow AI: Your intelligent co-pilot for the Indian stock market. Built for clarity, powered by AI.")
+    st.sidebar.info("EZTrade AI: Your intelligent co-pilot for the Indian stock market. Built for clarity, powered by AI.")
 
 if __name__ == "__main__":
     main()
