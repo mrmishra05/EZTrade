@@ -10,7 +10,7 @@ from openai import OpenAI # Import the OpenAI client library
 # IMPORTANT: For deployment on Streamlit Cloud, store your API keys securely
 # in a `.streamlit/secrets.toml` file.
 # Example secrets.toml content:
-# OPENAI_API_KEY = "sk-proj-YOUR_ACTUAL_OPENAI_KEY_HERE"
+# OPENAI_API_KEY = "sk-proj-D5mltM8NJVvQxOdHwPvheII7Tdw_cln39wTzv98FtHKeKCLZQWcAUksj9il45uBFWQTe0BLKt2T3BlbkFJxDh0fvd-h4QD4nlLfVzKyODp0lZUrMJsR8jnCZKP1SGsiaxSBWERxFXfJI1b0OrE2U05ZOyEA""
 # FINANCIAL_DATA_API_KEY = "your_financial_data_api_key_here"
 
 # Initialize OpenAI client (this will use the API key from st.secrets)
