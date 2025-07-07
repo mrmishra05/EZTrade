@@ -1,3 +1,4 @@
+# App.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -8,7 +9,7 @@ from openai import OpenAI # Import the OpenAI client library
 # --- Configuration for API Keys ---
 # WARNING: Embedding API keys directly in code is NOT recommended for security reasons.
 # For production deployments, always use Streamlit Secrets or environment variables.
-OPENAI_API_KEY_DIRECT = "sk-proj-D5mltM8NJVvQxOdHwPvheII7Tdw_cln39wTzv98FtHKeKCLZQWcAUksj9il45uBFWQTe0BLKt2T3BlbkFJxDh0fvd-h4QD4nlLfVzKyODp0lZUrMJsR8jnCZKP1SGsiaxSBWERxFXfJI1b0OrE2U05ZOyEA"
+OPENAI_API_KEY_DIRECT = "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"
 
 # Initialize OpenAI client
 try:
