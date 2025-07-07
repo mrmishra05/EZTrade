@@ -1,4 +1,3 @@
-# App.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -7,18 +6,16 @@ import time
 from openai import OpenAI # Import the OpenAI client library
 
 # --- Configuration for API Keys ---
-# IMPORTANT: For deployment on Streamlit Cloud, store your API keys securely
-# in a `.streamlit/secrets.toml` file.
-# Example secrets.toml content:
-# OPENAI_API_KEY = "sk-proj-D5mltM8NJVvQxOdHwPvheII7Tdw_cln39wTzv98FtHKeKCLZQWcAUksj9il45uBFWQTe0BLKt2T3BlbkFJxDh0fvd-h4QD4nlLfVzKyODp0lZUrMJsR8jnCZKP1SGsiaxSBWERxFXfJI1b0OrE2U05ZOyEA""
-# FINANCIAL_DATA_API_KEY = "your_financial_data_api_key_here"
+# WARNING: Embedding API keys directly in code is NOT recommended for security reasons.
+# For production deployments, always use Streamlit Secrets or environment variables.
+OPENAI_API_KEY_DIRECT = "sk-proj-D5mltM8NJVvQxOdHwPvheII7Tdw_cln39wTzv98FtHKeKCLZQWcAUksj9il45uBFWQTe0BLKt2T3BlbkFJxDh0fvd-h4QD4nlLfVzKyODp0lZUrMJsR8jnCZKP1SGsiaxSBWERxFXfJI1b0OrE2U05ZOyEA"
 
-# Initialize OpenAI client (this will use the API key from st.secrets)
-# Ensure OPENAI_API_KEY is set in your Streamlit secrets
+# Initialize OpenAI client
 try:
-    openai_client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-except KeyError:
-    st.error("OpenAI API Key not found in Streamlit Secrets. Please add it to .streamlit/secrets.toml or Streamlit Cloud secrets.")
+    # Using the directly embedded key as requested
+    openai_client = OpenAI(api_key=OPENAI_API_KEY_DIRECT)
+except Exception as e:
+    st.error(f"Error initializing OpenAI client: {e}. Please check your API key.")
     openai_client = None # Set to None if key is missing to prevent errors
 
 # --- Simulate Financial Data Functions (for 5000+ stocks, this would be a real API) ---
